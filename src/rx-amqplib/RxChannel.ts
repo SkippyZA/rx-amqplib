@@ -57,6 +57,17 @@ class RxChannel {
         }, options);
       });
   }
+
+
+  /**
+   * Close a channel. Will be resolved with no value once the closing handshake is complete.
+   *
+   * @returns {any}
+   */
+  public close(): Rx.Observable<RxChannel> {
+    return Rx.Observable.fromPromise(this.channel.close())
+      .map(() => this);
+  }
 }
 
 export default RxChannel;

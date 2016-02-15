@@ -24,4 +24,17 @@ export default class RxConnection {
       .flatMap((conn: Connection) => conn.createChannel())
       .map((channel: Channel) => new RxChannel(channel));
   }
+
+  /**
+   * Close the connection cleanly. Will immediately invalidate any unresolved operations, so it's best to make sure
+   * you've done everything you need to before calling this. Will be resolved once the connection, and underlying
+   * socket, are closed.
+   *
+   * @returns {any}
+   */
+  public close() {
+    return this.connection
+      .flatMap((conn: Connection) => conn.close())
+      .map(() => this);
+  }
 }
