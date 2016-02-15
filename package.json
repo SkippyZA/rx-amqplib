@@ -19,7 +19,8 @@
     "url": "https://github.com/SkippyZA/rx-amqplib/issues"
   },
   "scripts": {
-    "start": "ts-node ./src/client.ts"
+    "example-server": "gulp && node ./build/js/examples/server.js",
+    "example-client": "gulp && node ./build/js/examples/client.js"
   },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {

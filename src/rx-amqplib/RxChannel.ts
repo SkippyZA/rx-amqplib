@@ -1,13 +1,11 @@
 import * as Rx from 'rx';
-import RxChannel from './RxChannel';
 import {Connection, Channel, Options} from 'amqplib';
-import {Message} from "amqplib/properties";
-import RxChannel from "./";
+import {Message} from 'amqplib/properties';
 
 /**
  * AMQP Rx Channel
  */
-export default class RxChannel {
+class RxChannel {
 
   /**
    * Class constructor.
@@ -29,7 +27,7 @@ export default class RxChannel {
    */
   public assertQueue(queue: string, options: Options.AssertQueue): Rx.Observable<RxChannel> {
     return Rx.Observable.fromPromise(this.channel.assertQueue(queue, options))
-      .map(this);
+      .map(() => this);
   }
 
   /**
@@ -42,7 +40,7 @@ export default class RxChannel {
    */
   public sendToQueue(queue: string, message: Buffer, options?: Options.Publish): Rx.Observable<RxChannel> {
     return Rx.Observable.just(this.channel.sendToQueue(queue, message, options))
-      .map(this);
+      .map(() => this);
   };
 
   /**
@@ -53,10 +51,12 @@ export default class RxChannel {
    * @returns {Rx.Observable<Message>}
    */
   public consume(queue: string, options?: Options.Consume): Rx.Observable<Message> {
-    return Rx.Observable.create((observer: Rx.Observer) => {
+    return <Rx.Observable<Message>> Rx.Observable.create(observer => {
         this.channel.consume(queue, (msg: Message) => {
           observer.onNext(msg);
         }, options);
       });
   }
 }
+
+export default RxChannel;

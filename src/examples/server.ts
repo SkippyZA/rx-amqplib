@@ -9,14 +9,15 @@ let config = {
 
 // [PURE]
 let messageContent = R.prop('content');
-let toString = R.invoker(0, 'toString');
-let logMessageContent = R.compose(console.log, toString, messageContent);
+let logMessageContent = R.compose(console.log, R.toString, messageContent);
 
 let consume = R.invoker(2, 'consume');
 let consumeQueue = consume(config.queue, { noAck: true });
 
 // Process stream
+console.log('[*] Consumer connecting');
 RxAmqpLib.newConnection(config.host)
   .createChannel()
+  .doOnNext(() => console.log('[*] Connected!'))
   .flatMap(consumeQueue)
   .subscribe(logMessageContent);
