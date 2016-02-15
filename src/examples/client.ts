@@ -9,7 +9,7 @@ let config = {
 // [PURE]
 let assertQueue = R.invoker(2, 'assertQueue');
 let sendToQueue = R.invoker(2, 'sendToQueue');
-let closeChannel = R.invoker(0, 'close');
+let closeChannel = <any> R.invoker(0, 'close');
 
 // Process stream
 console.log('[*] Client connecting');
