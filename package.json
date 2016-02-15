@@ -1,0 +1,26 @@
+{
+  "name": "rx-amqplib",
+  "version": "1.0.0",
+  "description": "RxJS wrapper for the amqplib from squaremo",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/SkippyZA/rx-amqplib.git"
+  },
+  "keywords": [
+    "rxjs",
+    "amqp",
+    "amqplib",
+    "rabbitmq",
+    "queue"
+  ],
+  "author": "Steven Inskip",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SkippyZA/rx-amqplib/issues"
+  },
+  "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
+  "dependencies": {
+    "amqplib": "^0.4.1",
+    "rx": "^4.0.7"
+  }
+}

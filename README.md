@@ -1,0 +1,1 @@
+## RxJS wrapper for amqplib
