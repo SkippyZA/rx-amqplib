@@ -1056,7 +1056,7 @@ declare module R {
      * The returned function is curried and accepts `len + 1` parameters (or `method.length + 1`
      * when `len` is not specified), and the final parameter is the target object.
      */
-    invoker(len: number, name: string, obj?: any): Function;
+    invoker(len: number, name: string, obj?: any): any;
 
 
     lift(fn: Function, ...args: any[]): any;
