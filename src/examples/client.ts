@@ -7,18 +7,18 @@ let config = {
 };
 
 // [PURE]
-let assertQueue = R.invoker(2, 'assertQueue');
-let sendToQueue = R.invoker(2, 'sendToQueue');
-let closeChannel = R.invoker(0, 'close');
+let assertQueue = R.invoker(2, 'assertQueue')(config.queue);
+let sendToQueue = R.invoker(2, 'sendToQueue')(config.queue);
+let close = R.invoker(0, 'close');
 
 // Process stream
 console.log('[*] Client connecting');
+// @TODO: This is so broken. It needs to return an observable
 let conn = RxAmqpLib.newConnection(config.host);
+
 conn.createChannel()
-  .doOnNext(() => console.log('[*] Connected!'))
-  .flatMap(assertQueue(config.queue, { durable: false }))
-  .flatMap(sendToQueue(config.queue, new Buffer('Test message')))
+  .flatMap(assertQueue({ durable: false }))
+  .flatMap(sendToQueue(new Buffer('Test message')))
   .doOnNext(() => console.log('[*] Message sent'))
-  .flatMap(closeChannel)
-  .flatMap(() => conn.close())
+  .flatMap(close(conn))
   .subscribe();
