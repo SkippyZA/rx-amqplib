@@ -18,9 +18,23 @@
   "bugs": {
     "url": "https://github.com/SkippyZA/rx-amqplib/issues"
   },
+  "scripts": {
+    "start": "ts-node ./src/client.ts"
+  },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
     "amqplib": "^0.4.1",
+    "ramda": "^0.19.1",
     "rx": "^4.0.7"
+  },
+  "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.8.11",
+    "gulp-debug": "^2.0.1",
+    "gulp-inject": "^1.2.0",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-sourcemaps": "^1.5.1",
+    "gulp-tslint": "^1.4.4",
+    "gulp-typescript": "^2.5.0"
   }
 }
