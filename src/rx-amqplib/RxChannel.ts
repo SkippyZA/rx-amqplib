@@ -10,19 +10,10 @@ export default class RxChannel {
   public assertQueue(queue: string, options: any): Rx.Observable<RxChannel> {
     return Rx.Observable.fromPromise(this.channel.assertQueue(queue, options))
       .map(this);
-
-
-    //return this.channel
-    //  .flatMap((chan: Channel) => chan.assertQueue(queue, options))
-    //  .map(() => this);
   }
 
   public sendToQueue(queue: string, message: Buffer, options?: Options.Publish): Rx.Observable<RxChannel> {
     return Rx.Observable.just(this.channel.sendToQueue(queue, message, options))
       .map(this);
-
-    //return this.channel
-    //  .map((chan: Channel) => chan.sendToQueue(queue, message, options))
-    //  .map(() => this);
   };
 }
