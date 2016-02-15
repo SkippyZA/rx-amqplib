@@ -1,5 +1,4 @@
-import {RxAmqpLib} from './rx-amqplib/RxAmqpLib';
-import RxChannel from './rx-amqplib/RxChannel';
+import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
 import * as R from 'ramda';
 
 let config = {
@@ -7,9 +6,11 @@ let config = {
   host: 'amqp://localhost'
 };
 
+// [PURE]
 let assertQueue = R.invoker(2, 'assertQueue');
 let sendToQueue = R.invoker(2, 'sendToQueue');
 
+// Process stream
 RxAmqpLib
   .newConnection(config.host)
   .createChannel()

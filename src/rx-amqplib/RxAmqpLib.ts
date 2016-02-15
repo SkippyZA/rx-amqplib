@@ -1,8 +1,11 @@
-import RxConnection from './RxConnection';
 import * as Rx from 'rx';
 import * as AmqpLib from 'amqplib';
+import RxConnection from './RxConnection';
 
-export class RxAmqpLib {
+/**
+ * Factory for RxAmqpLib.
+ */
+export default class RxAmqpLib {
 
   /**
    * Create a new instance of RxConnection, which wraps the amqplib Connection obj.
