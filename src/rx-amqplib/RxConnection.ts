@@ -31,7 +31,7 @@ export default class RxConnection {
    *
    * @returns {any}
    */
-  public close() {
+  public close(): Rx.Observable<RxConnection> {
     return Rx.Observable.fromPromise(this.connection.close())
       .map(() => this);
   }
