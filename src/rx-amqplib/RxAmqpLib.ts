@@ -15,8 +15,8 @@ export default class RxAmqpLib {
    * @param options Custom AMQP options
    * @returns {RxConnection}
    */
-  public static newConnection(url: string, options?: any): RxConnection {
-    let amqpObservable: Rx.Observable<Connection> = Rx.Observable.fromPromise(AmqpLib.connect(url, options));
-    return new RxConnection(amqpObservable);
+  public static newConnection(url: string, options?: any): Rx.Observable<RxConnection> {
+    return Rx.Observable.fromPromise(AmqpLib.connect(url, options))
+      .map(connection => new RxConnection(connection))
   }
 }

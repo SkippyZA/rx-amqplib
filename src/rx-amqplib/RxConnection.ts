@@ -11,7 +11,7 @@ export default class RxConnection {
    *
    * @param connection
    */
-  constructor(private connection: Rx.Observable<Connection>) {
+  constructor(private connection: Connection) {
   }
 
   /**
@@ -20,8 +20,7 @@ export default class RxConnection {
    * @returns {any}
    */
   public createChannel(): Rx.Observable<RxChannel> {
-    return this.connection
-      .flatMap((conn: Connection) => conn.createChannel())
+    return Rx.Observable.fromPromise(this.connection.createChannel())
       .map((channel: Channel) => new RxChannel(channel));
   }
 
@@ -33,8 +32,7 @@ export default class RxConnection {
    * @returns {any}
    */
   public close() {
-    return this.connection
-      .flatMap((conn: Connection) => conn.close())
+    return Rx.Observable.fromPromise(this.connection.close())
       .map(() => this);
   }
 }
