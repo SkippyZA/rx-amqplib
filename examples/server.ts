@@ -1,4 +1,4 @@
-import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
+import RxAmqpLib from '../src/rx-amqplib/RxAmqpLib';
 import {Message} from 'amqplib/properties';
 import * as R from 'ramda';
 
