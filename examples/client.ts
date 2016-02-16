@@ -16,13 +16,12 @@ let close = R.invoker(0, 'close');
 // Process stream
 console.log('[*] Client connecting');
 RxAmqpLib.newConnection(config.host)
-  .flatMap((connection: RxConnection) => Rx.Observable
-    .just(connection)
-    .flatMap(createChannel)
-    .flatMap(assertQueue({ durable: false }))
-    .flatMap(sendToQueue(new Buffer('Test message')))
-    .doOnNext(() => console.log('[*] Message sent'))
-    .flatMap(close)
-    .flatMap(() => close(connection))
+  .flatMap((connection: RxConnection) =>
+    createChannel(connection)
+      .flatMap(assertQueue({ durable: false }))
+      .flatMap(sendToQueue(new Buffer('Test message')))
+      .doOnNext(() => console.log('[*] Message sent'))
+      .flatMap(close)
+      .flatMap(() => close(connection))
   )
   .subscribe();
