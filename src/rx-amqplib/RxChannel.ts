@@ -62,11 +62,38 @@ class RxChannel {
   /**
    * Close a channel. Will be resolved with no value once the closing handshake is complete.
    *
-   * @returns {any}
+   * @returns {Rx.Observable<RxChannel>}
    */
   public close(): Rx.Observable<RxChannel> {
     return Rx.Observable.fromPromise(this.channel.close())
       .map(() => this);
+  }
+
+  /**
+   * Set the prefetch count for this channel. The count given is the maximum number of messages sent over the channel
+   * that can be awaiting acknowledgement; once there are count messages outstanding, the server will not send more
+   * messages on this channel until one or more have been acknowledged. A falsey value for count indicates no such
+   * limit.
+   *
+   * @param count
+   * @param global
+   * @returns {Rx.Observable<RxChannel>}
+   */
+  public prefetch(count: number, global?: boolean): Rx.Observable<RxChannel> {
+    return Rx.Observable.fromPromise(this.channel.prefetch(count, global))
+      .map(() => this);
+  }
+
+  /**
+   * Acknowledge the given message, or all messages up to and including the given message.
+   *
+   * @param message
+   * @param allUpTo
+   * @returns {Rx.Observable<RxChannel>}
+   */
+  public ack(message: Message, allUpTo?: boolean): Rx.Observable<RxChannel> {
+    return Rx.Observable.just(this.channel.ack(message, allUpTo))
+      .map(() => this)
   }
 }
 

@@ -25,3 +25,5 @@ RxAmqpLib.newConnection(config.host)
       .flatMap(() => close(connection))
   )
   .subscribe();
+
+
