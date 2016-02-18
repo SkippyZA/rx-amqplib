@@ -1,7 +1,6 @@
 import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
 import RxConnection from '../rx-amqplib/RxConnection';
 import RxChannel from '../rx-amqplib/RxChannel';
-import {Message} from 'amqplib/properties';
 import * as Rx from 'rx';
 import * as R from 'ramda';
 
@@ -14,6 +13,9 @@ let prefetchOne = R.invoker(1, 'prefetch')(1);
 let consume = R.invoker(2, 'consume');
 let consumeQueue = consume(config.queue, { noAck: false });
 let messageContent = R.compose(R.toString, R.prop('content'));
+let ack = R.invoker(1, 'ack');
+// Impure: Display message content to console log
+let logMessageContent = R.compose(console.log, R.concat(' -> Received: '), messageContent);
 
 console.log('[*] Worker running');
 RxAmqpLib.newConnection(config.host)
@@ -22,11 +24,9 @@ RxAmqpLib.newConnection(config.host)
       .assertQueue(config.queue, { durable: true })
       .flatMap(prefetchOne)
       .flatMap(consumeQueue)
-      .doOnNext(message => console.log(' -> Received: \'%s\'', messageContent(message)))
+      .doOnNext(logMessageContent)
       .delay(2000)
-      .doOnNext(() => console.log('    Done\n'))
-      // @TODO: This needs to be refactored. Make own RxMessage class which extends Message and has ack etc...
-      .flatMap((message?: Message) => channel.ack(message))
+      .flatMap(ack(channel))
     )
   )
-  .subscribe();
+  .subscribe(() => console.log('    Done\n'), console.error);
