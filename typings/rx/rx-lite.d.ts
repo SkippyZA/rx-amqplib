@@ -270,6 +270,7 @@ declare module Rx {
 		concatMap<R>(selector: (value: T, index: number) => Observable<R>): Observable<R>;	// alias for selectConcat
 		concatMap<R>(selector: (value: T, index: number) => IPromise<R>): Observable<R>;	// alias for selectConcat
 		concatMap<R>(sequence: Observable<R>): Observable<R>;	// alias for selectConcat
+		delay(delay: number): Observable<T>; // Basic delay
 		merge(maxConcurrent: number): T;
 		merge(other: Observable<T>): Observable<T>;
 		merge(other: IPromise<T>): Observable<T>;
