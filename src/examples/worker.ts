@@ -19,7 +19,8 @@ let logMessageContent = R.compose(console.log, R.concat(' -> Received: '), messa
 
 console.log('[*] Worker running');
 RxAmqpLib.newConnection(config.host)
-  .flatMap((connection: RxConnection) => connection.createChannel()
+  .flatMap((connection: RxConnection) => connection
+    .createChannel()
     .flatMap((channel: RxChannel) => channel
       .assertQueue(config.queue, { durable: true })
       .flatMap(prefetchOne)
