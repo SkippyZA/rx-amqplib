@@ -1,7 +1,7 @@
 import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
 import RxConnection from '../rx-amqplib/RxConnection';
-import * as R from 'ramda';
 import * as Rx from 'rx';
+import * as R from 'ramda';
 
 let config = {
   queue: 'test_queue',
