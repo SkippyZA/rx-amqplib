@@ -1,5 +1,6 @@
 import * as Rx from 'rx';
 import {Connection, Channel, Options} from 'amqplib';
+import RxMessage from './RxMessage';
 import {Message} from 'amqplib/properties';
 
 /**
@@ -48,12 +49,12 @@ class RxChannel {
    *
    * @param queue
    * @param options
-   * @returns {Rx.Observable<Message>}
+   * @returns {Rx.Observable<RxMessage>}
    */
-  public consume(queue: string, options?: Options.Consume): Rx.Observable<Message> {
-    return <Rx.Observable<Message>> Rx.Observable.create(observer => {
+  public consume(queue: string, options?: Options.Consume): Rx.Observable<RxMessage> {
+    return <Rx.Observable<RxMessage>> Rx.Observable.create(observer => {
         this.channel.consume(queue, (msg: Message) => {
-          observer.onNext(msg);
+          observer.onNext(new RxMessage(msg));
         }, options);
       });
   }
@@ -91,7 +92,7 @@ class RxChannel {
    * @param allUpTo
    * @returns {Rx.Observable<RxChannel>}
    */
-  public ack(message: Message, allUpTo?: boolean): Rx.Observable<RxChannel> {
+  public ack(message: RxMessage, allUpTo?: boolean): Rx.Observable<RxChannel> {
     return Rx.Observable.just(this.channel.ack(message, allUpTo))
       .map(() => this)
   }
