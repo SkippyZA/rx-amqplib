@@ -15,7 +15,6 @@ let consume = R.invoker(2, 'consume');
 let consumeQueue = consume(config.queue, { noAck: false });
 let messageContent = R.compose(R.toString, R.prop('content'));
 
-
 console.log('[*] Worker running');
 RxAmqpLib.newConnection(config.host)
   .flatMap((connection: RxConnection) => connection.createChannel()
@@ -26,8 +25,7 @@ RxAmqpLib.newConnection(config.host)
       .doOnNext(message => console.log(' -> Received: \'%s\'', messageContent(message)))
       .delay(2000)
       .doOnNext(() => console.log('    Done\n'))
-      // @TODO: This needs to be refactored. Perhaps it will be best to make my own RxMessage class which has ack and
-      // takes a method
+      // @TODO: This needs to be refactored. Make own RxMessage class which extends Message and has ack etc...
       .flatMap((message?: Message) => channel.ack(message))
     )
   )
