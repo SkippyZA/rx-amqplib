@@ -32,6 +32,34 @@ class RxChannel {
   }
 
   /**
+   * Assert an exchange into existence.
+   *
+   * @param exchange
+   * @param type
+   * @param options
+   * @returns {Rx.Observable<RxChannel>}
+   */
+  public assertExchange(exchange: string, type: string, options?: Options.AssertExchange): Rx.Observable<RxChannel> {
+    return Rx.Observable.fromPromise(this.channel.assertExchange(exchange, type, options))
+      .map(() => this);
+  };
+
+  /**
+   * Publish a single message to an exchange.
+   *
+   * @param exchange
+   * @param routingKey
+   * @param content
+   * @param options
+   * @returns {Rx.Observable<RxChannel>}
+   */
+  public publish(exchange: string, routingKey: string, content: Buffer,
+                 options?: Options.Publish): Rx.Observable<RxChannel> {
+    return Rx.Observable.just(this.channel.publish(exchange, routingKey, content, options))
+      .map(() => this);
+  }
+
+  /**
    * Send a single message with the content given as a buffer to the specific queue named, bypassing routing.
    *
    * @param queue

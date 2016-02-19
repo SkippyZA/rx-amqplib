@@ -22,7 +22,8 @@
     "example-server": "gulp && node ./build/js/examples/server.js",
     "example-client": "gulp && node ./build/js/examples/client.js",
     "example-new-task": "gulp && node ./build/js/examples/new_task.js",
-    "example-worker": "gulp && node ./build/js/examples/worker.js"
+    "example-worker": "gulp && node ./build/js/examples/worker.js",
+    "example-emit-logs": "gulp && node ./build/js/examples/emit_logs.js"
   },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
