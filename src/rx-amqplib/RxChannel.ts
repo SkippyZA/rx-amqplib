@@ -45,7 +45,7 @@ class RxChannel {
   };
 
   /**
-   * Set up a consumer where each message will emit an observable of `Message`
+   * Set up a consumer where each message will emit an observable of `RxMessage`
    *
    * @param queue
    * @param options
@@ -61,7 +61,7 @@ class RxChannel {
 
 
   /**
-   * Close a channel. Will be resolved with no value once the closing handshake is complete.
+   * Close a channel.
    *
    * @returns {Rx.Observable<RxChannel>}
    */
