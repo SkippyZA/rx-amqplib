@@ -21,9 +21,8 @@ RxAmqpLib.newConnection(config.host)
   .flatMap(createChannel)
   .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, { durable: false }))
   .flatMap((exchange: AssertExchangeReply) => exchange.channel.assertQueue('', { exclusive: true }))
-  .flatMap((queue: AssertQueueReply) =>
-    queue.channel
-      .bindQueue(queue.queue, config.exchange, '')
-      .flatMap(queue.channel.consume(queue.queue, { noAck: true }))
+  .flatMap((queue: AssertQueueReply) => queue.channel
+    .bindQueue(queue.queue, config.exchange, '')
+    .flatMap(queue.channel.consume(queue.queue, { noAck: true }))
   )
   .subscribe(logMessageContent, console.error);
