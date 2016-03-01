@@ -91,21 +91,6 @@ class RxChannel {
   };
 
   /**
-   * Assert a routing path from an exchange to a queue: the exchange named by source will relay messages to the queue
-   * named, according to the type of the exchange and the pattern given.
-   *
-   * @param queue
-   * @param source
-   * @param pattern
-   * @param args
-   * @returns {Rx.Observable<RxChannel>}
-   */
-  public bindQueue(queue: string, source: string, pattern: string, args?: any) {
-    return Rx.Observable.just(this.channel.bindQueue(queue, source, pattern, args))
-      .map(() => this);
-  }
-
-  /**
    * Set up a consumer where each message will emit an observable of `RxMessage`
    *
    * @param queue
