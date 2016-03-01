@@ -8,17 +8,17 @@ const config = {
   queue: 'task_queue'
 };
 
-let close = R.invoker(0, 'close');
-let assertQueue = R.invoker(2, 'assertQueue')(config.queue);
-let sendToQueue = R.invoker(3, 'sendToQueue')(config.queue);
 
-console.log('[*] New task');
 RxAmqpLib.newConnection(config.host)
-  .flatMap((connection: RxConnection) => connection
+  .flatMap(connection => connection
     .createChannel()
-    .flatMap(assertQueue({ durable: true }))
-    .flatMap(sendToQueue(new Buffer('Task'), { deliveryMode: true }))
-    .flatMap(close)
-    .flatMap(() => close(connection))
+    .flatMap(channel => channel.assertQueue(config.queue, { durable: true }))
+    .doOnNext(assertQueueReply => {
+      assertQueueReply.channel.sendToQueue(config.queue, new Buffer('Task'), { deliveryMode: true });
+      console.log('Task sent to queue');
+    })
+    .flatMap(assertQueueReply => assertQueueReply.channel.close())
+    .flatMap(() => connection.close())
   )
   .subscribe();
+

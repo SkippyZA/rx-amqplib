@@ -2,6 +2,9 @@ import * as Rx from 'rx';
 import {Connection, Channel, Options} from 'amqplib';
 import RxMessage from './RxMessage';
 import {Message} from 'amqplib/properties';
+import AssertQueueReply from './reply/AssertQueueReply';
+import AssertExchangeReply from "./reply/AssertExchangeReply";
+import EmptyReply from "./reply/EmptyReply";
 
 /**
  * AMQP Rx Channel
@@ -24,13 +27,11 @@ class RxChannel {
    *
    * @param queue
    * @param options
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns Rx.Observable<AssertQueueReply>
    */
-  public assertQueue(queue: string, options: Options.AssertQueue): Rx.Observable<RxChannel> {
+  public assertQueue(queue: string, options: Options.AssertQueue): Rx.Observable<AssertQueueReply> {
     return Rx.Observable.fromPromise(this.channel.assertQueue(queue, options))
-      .doOnNext(console.log)
-      // fml, i need to get the queue name out of this :/
-      .map(() => this);
+      .map(reply => new AssertQueueReply(this, reply));
   }
 
   /**
@@ -39,11 +40,13 @@ class RxChannel {
    * @param exchange
    * @param type
    * @param options
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns {Rx.Observable<AssertExchangeReply>}
    */
-  public assertExchange(exchange: string, type: string, options?: Options.AssertExchange): Rx.Observable<RxChannel> {
+  public assertExchange(exchange: string, type: string, options?: Options.AssertExchange):
+    Rx.Observable<AssertExchangeReply> {
+
     return Rx.Observable.fromPromise(this.channel.assertExchange(exchange, type, options))
-      .map(() => this);
+      .map(reply => new AssertExchangeReply(this, reply))
   };
 
   /**
@@ -53,12 +56,26 @@ class RxChannel {
    * @param routingKey
    * @param content
    * @param options
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns boolean
    */
   public publish(exchange: string, routingKey: string, content: Buffer,
-                 options?: Options.Publish): Rx.Observable<RxChannel> {
-    return Rx.Observable.just(this.channel.publish(exchange, routingKey, content, options))
-      .map(() => this);
+                 options?: Options.Publish): boolean {
+    return this.channel.publish(exchange, routingKey, content, options);
+  }
+
+  /**
+   * Assert a routing path from an exchange to a queue. The exchanged named by `source` will relay messages to the
+   * `queue` name, according to the type of the exchange and the `pattern` given.
+   *
+   * @param queue
+   * @param source
+   * @param pattern
+   * @param args
+   * @returns Rx.Observable<EmptyReply>
+   */
+  public bindQueue(queue: string, source: string, pattern: string, args?: any): Rx.Observable<EmptyReply> {
+    return Rx.Observable.just(this.channel.bindQueue(queue, source, pattern, args))
+      .map(() => new EmptyReply(this))
   }
 
   /**
@@ -67,11 +84,10 @@ class RxChannel {
    * @param queue
    * @param message
    * @param options
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns boolean
    */
-  public sendToQueue(queue: string, message: Buffer, options?: Options.Publish): Rx.Observable<RxChannel> {
-    return Rx.Observable.just(this.channel.sendToQueue(queue, message, options))
-      .map(() => this);
+  public sendToQueue(queue: string, message: Buffer, options?: Options.Publish): boolean {
+    return this.channel.sendToQueue(queue, message, options);
   };
 
   /**
@@ -108,11 +124,10 @@ class RxChannel {
   /**
    * Close a channel.
    *
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns Rx.Observable<void>
    */
-  public close(): Rx.Observable<RxChannel> {
+  public close(): Rx.Observable<void> {
     return Rx.Observable.fromPromise(this.channel.close())
-      .map(() => this);
   }
 
   /**
@@ -125,10 +140,10 @@ class RxChannel {
    * @param global
    * @returns {Rx.Observable<RxChannel>}
    */
-  public prefetch(count: number, global?: boolean): Rx.Observable<RxChannel> {
-    return Rx.Observable.fromPromise(this.channel.prefetch(count, global))
-      .map(() => this);
-  }
+  //public prefetch(count: number, global?: boolean): Rx.Observable<RxChannel> {
+  //  return Rx.Observable.fromPromise(this.channel.prefetch(count, global))
+  //    .map(() => this);
+  //}
 
   /**
    * Acknowledge the given message, or all messages up to and including the given message.

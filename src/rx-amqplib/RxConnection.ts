@@ -29,10 +29,9 @@ export default class RxConnection {
    * you've done everything you need to before calling this. Will be resolved once the connection, and underlying
    * socket, are closed.
    *
-   * @returns {any}
+   * @returns Rx.Observable<void>
    */
-  public close(): Rx.Observable<RxConnection> {
-    return Rx.Observable.fromPromise(this.connection.close())
-      .map(() => this);
+  public close(): Rx.Observable<void> {
+    return Rx.Observable.fromPromise(this.connection.close());
   }
 }

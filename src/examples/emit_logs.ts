@@ -3,27 +3,28 @@ import RxConnection from '../rx-amqplib/RxConnection';
 import RxChannel from '../rx-amqplib/RxChannel';
 import * as Rx from 'rx';
 import * as R from 'ramda';
+import AssertExchangeReply from "../rx-amqplib/reply/AssertExchangeReply";
 
 let config = {
   exchange: 'logs',
-  exchange_type: 'fanout',
+  exchangeType: 'fanout',
   host: 'amqp://localhost'
 };
 
-let log = (x: any) => { console.log(x); return x; };
-let publish = R.invoker(3, 'publish')(config.exchange, '');
+let createChannel = R.invoker(0, 'createChannel');
 let close = R.invoker(0, 'close');
 
-console.log('[*] Emit logs');
+// Process stream
 RxAmqpLib.newConnection(config.host)
   .flatMap((connection: RxConnection) => connection
     .createChannel()
-    .flatMap((channel: RxChannel) => channel
-      .assertExchange(config.exchange, config.exchange_type, { durable: false })
-      .flatMap(publish(new Buffer('Herpa durp')))
-      .doOnNext(() => console.log('    Sent'))
-      .flatMap(close)
-    )
-    .flatMap(() => connection.close())
+    .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, {durable: false}))
+    .doOnNext((exchange: AssertExchangeReply) => {
+      exchange.channel.publish(config.exchange, '', new Buffer('test message'));
+    })
+    .flatMap(exchange => close(exchange.channel))
+    .flatMap(() => close(connection))
   )
-  .subscribe(() => {}, console.error);
+  .subscribe(() => {}, console.error, () => console.log('Messages sent'));
+
+
