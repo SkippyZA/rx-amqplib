@@ -1,0 +1,30 @@
+import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
+import RxConnection from '../rx-amqplib/RxConnection';
+import RxChannel from '../rx-amqplib/RxChannel';
+import AssertExchangeReply from '../rx-amqplib/reply/AssertExchangeReply';
+import * as Rx from 'rx';
+import * as R from 'ramda';
+
+let config = {
+  exchange: 'topic_logs',
+  exchangeType: 'topic',
+  host: 'amqp://localhost'
+};
+
+let args = process.argv.slice(2);
+let severity = (args.length > 0) ? args[0] : 'info';
+let message = args.slice(1).join(' ') || 'Hello World!';
+
+let close = R.invoker(0, 'close');
+
+RxAmqpLib.newConnection(config.host)
+  .flatMap(connection => connection
+    .createChannel()
+    .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, { durable: false }))
+    .doOnNext((reply: AssertExchangeReply) => reply.channel.publish(config.exchange, severity, new Buffer(message)))
+    .doOnNext(() => console.log(' [x] Sent %s: \'%s\'', severity, message))
+    .flatMap((reply: AssertExchangeReply) => close(reply.channel))
+    .flatMap(() => close(connection))
+  )
+  .subscribe(() => {}, console.error);
+
