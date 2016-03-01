@@ -49,20 +49,19 @@ class RxChannel {
       .map(reply => new AssertExchangeReply(this, reply))
   };
 
-  ///**
-  // * Publish a single message to an exchange.
-  // *
-  // * @param exchange
-  // * @param routingKey
-  // * @param content
-  // * @param options
-  // * @returns {Rx.Observable<RxChannel>}
-  // */
-  //public publish(exchange: string, routingKey: string, content: Buffer,
-  //               options?: Options.Publish): Rx.Observable<RxChannel> {
-  //  return Rx.Observable.just(this.channel.publish(exchange, routingKey, content, options))
-  //    .map(() => this);
-  //}
+  /**
+   * Publish a single message to an exchange.
+   *
+   * @param exchange
+   * @param routingKey
+   * @param content
+   * @param options
+   * @returns boolean
+   */
+  public publish(exchange: string, routingKey: string, content: Buffer,
+                 options?: Options.Publish): boolean {
+    return this.channel.publish(exchange, routingKey, content, options);
+  }
 
   /**
    * Assert a routing path from an exchange to a queue. The exchanged named by `source` will relay messages to the
@@ -111,12 +110,11 @@ class RxChannel {
   /**
    * Close a channel.
    *
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns Rx.Observable<void>
    */
-  //public close(): Rx.Observable<RxChannel> {
-  //  return Rx.Observable.fromPromise(this.channel.close())
-  //    .map(() => this);
-  //}
+  public close(): Rx.Observable<void> {
+    return Rx.Observable.fromPromise(this.channel.close())
+  }
 
   /**
    * Set the prefetch count for this channel. The count given is the maximum number of messages sent over the channel
