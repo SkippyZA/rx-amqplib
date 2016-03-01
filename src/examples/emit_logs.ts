@@ -13,21 +13,20 @@ let config = {
 };
 
 let createChannel = R.invoker(0, 'createChannel');
-let publish = R.invoker(3, 'publish')(config.exchange, '');
 let close = R.invoker(0, 'close');
 
 // Process stream
 RxAmqpLib.newConnection(config.host)
-  .flatMap((connection: RxConnection) =>
-    connection.createChannel()
-      .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, {durable: false}))
-      .doOnNext((exchange: AssertExchangeReply) => {
-        for (let i: number = 0; i < config.messageCount; i++) {
-          exchange.channel.publish(config.exchange, '', new Buffer('test message'));
-        }
-      })
-      .flatMap(exchange => exchange.channel.close())
-      .flatMap(() => connection.close())
+  .flatMap((connection: RxConnection) => connection
+    .createChannel()
+    .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, {durable: false}))
+    .doOnNext((exchange: AssertExchangeReply) => {
+      for (let i: number = 0; i < config.messageCount; i++) {
+        exchange.channel.publish(config.exchange, '', new Buffer('test message'));
+      }
+    })
+    .flatMap(exchange => close(exchange.channel))
+    .flatMap(() => close(connection))
   )
   .subscribe(() => {}, console.error, () => console.log('Messages sent'));
 
