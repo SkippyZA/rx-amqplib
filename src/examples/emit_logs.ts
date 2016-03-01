@@ -26,7 +26,6 @@ RxAmqpLib.newConnection(config.host)
           exchange.channel.publish(config.exchange, '', new Buffer('test message'));
         }
       })
-      //.delay(2000)
       .flatMap(exchange => exchange.channel.close())
       .flatMap(() => connection.close())
   )
