@@ -8,8 +8,7 @@ import AssertExchangeReply from "../rx-amqplib/reply/AssertExchangeReply";
 let config = {
   exchange: 'logs',
   exchangeType: 'fanout',
-  host: 'amqp://localhost',
-  messageCount: 2
+  host: 'amqp://localhost'
 };
 
 let createChannel = R.invoker(0, 'createChannel');
@@ -21,9 +20,7 @@ RxAmqpLib.newConnection(config.host)
     .createChannel()
     .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, {durable: false}))
     .doOnNext((exchange: AssertExchangeReply) => {
-      for (let i: number = 0; i < config.messageCount; i++) {
-        exchange.channel.publish(config.exchange, '', new Buffer('test message'));
-      }
+      exchange.channel.publish(config.exchange, '', new Buffer('test message'));
     })
     .flatMap(exchange => close(exchange.channel))
     .flatMap(() => close(connection))
