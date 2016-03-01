@@ -78,18 +78,17 @@ class RxChannel {
       .map(() => new EmptyReply(this))
   }
 
-  ///**
-  // * Send a single message with the content given as a buffer to the specific queue named, bypassing routing.
-  // *
-  // * @param queue
-  // * @param message
-  // * @param options
-  // * @returns {Rx.Observable<RxChannel>}
-  // */
-  //public sendToQueue(queue: string, message: Buffer, options?: Options.Publish): Rx.Observable<RxChannel> {
-  //  return Rx.Observable.just(this.channel.sendToQueue(queue, message, options))
-  //    .map(() => this);
-  //};
+  /**
+   * Send a single message with the content given as a buffer to the specific queue named, bypassing routing.
+   *
+   * @param queue
+   * @param message
+   * @param options
+   * @returns boolean
+   */
+  public sendToQueue(queue: string, message: Buffer, options?: Options.Publish): boolean {
+    return this.channel.sendToQueue(queue, message, options);
+  };
 
   /**
    * Set up a consumer where each message will emit an observable of `RxMessage`
