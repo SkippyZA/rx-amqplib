@@ -7,7 +7,7 @@ import AssertExchangeReply from "../rx-amqplib/reply/AssertExchangeReply";
 
 let config = {
   exchange: 'direct_logs',
-  exchange_type: 'direct',
+  exchangeType: 'direct',
   host: 'amqp://localhost'
 };
 
@@ -20,7 +20,7 @@ let close = R.invoker(0, 'close');
 RxAmqpLib.newConnection(config.host)
   .flatMap(connection => connection
     .createChannel()
-    .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchange_type, { durable: false }))
+    .flatMap((channel: RxChannel) => channel.assertExchange(config.exchange, config.exchangeType, { durable: false }))
     .doOnNext((reply: AssertExchangeReply) => reply.channel.publish(config.exchange, severity, new Buffer(message)))
     .doOnNext(() => console.log('Sent %s: \'%s\'', severity, message))
     .flatMap((reply: AssertExchangeReply) => close(reply.channel))
