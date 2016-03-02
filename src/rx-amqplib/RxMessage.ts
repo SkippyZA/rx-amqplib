@@ -14,6 +14,18 @@ class RxMessage implements Message {
     this.channel = channel;
   }
 
+  reply(buffer: Buffer): boolean {
+    if (!(this.properties.replyTo || this.properties.correlationId)) {
+      // @TODO: Decide if whether to throw error or return false
+      //throw Error('Message must contain a value for properties.replyTo and properties.correlationId');
+      return false;
+    }
+
+    return this.channel.sendToQueue(this.properties.replyTo, buffer, {
+      correlationId: this.properties.correlationId
+    });
+  }
+
   ack(allUpTo?: boolean): void {
     return this.channel.ack(this, allUpTo);
   }
