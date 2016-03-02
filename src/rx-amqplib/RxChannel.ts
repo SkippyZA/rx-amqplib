@@ -100,7 +100,7 @@ class RxChannel {
   public consume(queue: string, options?: Options.Consume): Rx.Observable<RxMessage> {
     return <Rx.Observable<RxMessage>> Rx.Observable.create(observer => {
         this.channel.consume(queue, (msg: Message) => {
-          observer.onNext(new RxMessage(msg));
+          observer.onNext(new RxMessage(msg, this));
         }, options);
       });
   }
@@ -123,23 +123,22 @@ class RxChannel {
    *
    * @param count
    * @param global
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns {Rx.Observable<EmptyReply>}
    */
-  //public prefetch(count: number, global?: boolean): Rx.Observable<RxChannel> {
-  //  return Rx.Observable.fromPromise(this.channel.prefetch(count, global))
-  //    .map(() => this);
-  //}
+  public prefetch(count: number, global?: boolean): Rx.Observable<EmptyReply> {
+    return Rx.Observable.fromPromise(this.channel.prefetch(count, global))
+      .map(reply => new EmptyReply(this));
+  }
 
   /**
    * Acknowledge the given message, or all messages up to and including the given message.
    *
    * @param message
    * @param allUpTo
-   * @returns {Rx.Observable<RxChannel>}
+   * @returns void
    */
-  public ack(message: RxMessage, allUpTo?: boolean): Rx.Observable<RxChannel> {
-    return Rx.Observable.just(this.channel.ack(message, allUpTo))
-      .map(() => this)
+  public ack(message: RxMessage, allUpTo?: boolean): void {
+    return this.channel.ack(message, allUpTo);
   }
 }
 

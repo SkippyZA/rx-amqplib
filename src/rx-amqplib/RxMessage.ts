@@ -5,15 +5,17 @@ class RxMessage implements Message {
   content: Buffer;
   fields: any;
   properties: any;
+  channel: RxChannel;
 
-  constructor(message: Message) {
+  constructor(message: Message, channel?: RxChannel) {
     this.content = message.content;
     this.fields = message.fields;
     this.properties = message.properties;
+    this.channel = channel;
   }
 
-  ack(channel: RxChannel, allUpTo?: boolean): Rx.Observable<RxChannel> {
-    return channel.ack(this, allUpTo);
+  ack(allUpTo?: boolean): void {
+    return this.channel.ack(this, allUpTo);
   }
 }
 
