@@ -4,4 +4,6 @@
 /// <reference path="amqplib/amqplib.d.ts" />
 /// <reference path="node/node.d.ts" />
 /// <reference path="when/when.d.ts" />
-/// <reference path="ramda/ramda.d.ts" />
+/// <reference path="node-uuid/node-uuid-base.d.ts" />
+/// <reference path="node-uuid/node-uuid-cjs.d.ts" />
+/// <reference path="node-uuid/node-uuid.d.ts" />

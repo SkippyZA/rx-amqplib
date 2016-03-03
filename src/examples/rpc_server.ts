@@ -1,9 +1,6 @@
 import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
-import RxConnection from '../rx-amqplib/RxConnection';
-import RxChannel from '../rx-amqplib/RxChannel';
+import RxMessage from '../rx-amqplib/RxMessage';
 import * as Rx from 'rx';
-import * as R from 'ramda';
-import RxMessage from "../rx-amqplib/RxMessage";
 
 let fib = (n: number) => {
   let a = 0;
@@ -18,11 +15,6 @@ let fib = (n: number) => {
   return a;
 };
 
-const config = {
-  host: 'amqp://localhost',
-  queue: 'rpc_queue'
-};
-
 let reply = (message: RxMessage) => {
   let number: number = parseInt(message.content.toString());
   let fibResponse = fib(number);
@@ -31,6 +23,11 @@ let reply = (message: RxMessage) => {
 
   message.reply(new Buffer(fibResponse.toString()));
   message.ack();
+};
+
+const config = {
+  host: 'amqp://localhost',
+  queue: 'rpc_queue'
 };
 
 RxAmqpLib.newConnection(config.host)

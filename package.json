@@ -28,6 +28,7 @@
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
     "amqplib": "^0.4.1",
+    "node-uuid": "^1.4.7",
     "ramda": "^0.19.1",
     "rx": "^4.0.7"
   },
