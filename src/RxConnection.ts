@@ -5,7 +5,7 @@ import {Connection, Channel, Options} from 'amqplib';
 /**
  * Connection to AMQP server.
  */
-export default class RxConnection {
+class RxConnection {
   /**
    * Class constructor
    *
@@ -35,3 +35,5 @@ export default class RxConnection {
     return Rx.Observable.fromPromise(this.connection.close());
   }
 }
+
+export default RxConnection;

@@ -1,10 +1,10 @@
 import * as Rx from 'rx';
 import {Connection, Channel, Options} from 'amqplib';
-import RxMessage from './RxMessage';
 import {Message} from 'amqplib/properties';
 import AssertQueueReply from './reply/AssertQueueReply';
-import AssertExchangeReply from "./reply/AssertExchangeReply";
-import EmptyReply from "./reply/EmptyReply";
+import AssertExchangeReply from './reply/AssertExchangeReply';
+import EmptyReply from './reply/EmptyReply';
+import RxMessage from './RxMessage';
 
 /**
  * AMQP Rx Channel

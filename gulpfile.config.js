@@ -2,15 +2,12 @@
 
 var GulpConfig = (function () {
   function gulpConfig() {
-    //Got tired of scrolling through all the comments so removed them
-    //Don't hurt me AC :-)
     this.source = './src/';
-    this.dest = './build/';
-
-    this.tsOutputPath = this.dest + '/js';
-    this.allTypeScript = this.source + '/**/*.ts';
-
+    this.dest = './dist/';
     this.typings = './typings/';
+
+    this.tsOutputPath = this.dest;
+    this.allTypeScript = this.source + '/**/*.ts';
     this.libraryTypeScriptDefinitions = this.typings + '/**/*.ts';
   }
   return gulpConfig;

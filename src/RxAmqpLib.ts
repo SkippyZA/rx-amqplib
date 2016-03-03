@@ -6,7 +6,7 @@ import {Connection} from 'amqplib';
 /**
  * Factory for RxAmqpLib.
  */
-export default class RxAmqpLib {
+class RxAmqpLib {
 
   /**
    * Create a new instance of RxConnection, which wraps the amqplib Connection obj.
@@ -23,3 +23,5 @@ export default class RxAmqpLib {
       .map(connection => new RxConnection(connection));
   }
 }
+
+export default RxAmqpLib;
