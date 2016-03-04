@@ -19,17 +19,23 @@
     "url": "https://github.com/SkippyZA/rx-amqplib/issues"
   },
   "scripts": {
-    "example-server": "gulp && node ./build/js/examples/server.js",
-    "example-client": "gulp && node ./build/js/examples/client.js",
-    "example-new-task": "gulp && node ./build/js/examples/new_task.js",
-    "example-worker": "gulp && node ./build/js/examples/worker.js",
-    "example-emit-logs": "gulp && node ./build/js/examples/emit_logs.js"
+    "example-client": "gulp && node ./examples/client.js",
+    "example-emit-logs-direct": "gulp && node ./examples/emit_log_direct.js",
+    "example-emit-logs-topic": "gulp && node ./examples/emit_log_topic.js",
+    "example-emit-logs": "gulp && node ./examples/emit_logs.js",
+    "example-new-task": "gulp && node ./examples/new_task.js",
+    "example-receive-logs": "gulp && node ./examples/receive_logs.js",
+    "example-receive-logs-direct": "gulp && node ./examples/receive_logs_direct.js",
+    "example-receive-logs-topic": "gulp && node ./examples/receive_logs_topic.js",
+    "example-rcp-client": "gulp && node ./examples/rpc_client.js",
+    "example-rcp-server": "gulp && node ./examples/rpc_server.js",
+    "example-server": "gulp && node ./examples/server.js",
+    "example-worker": "gulp && node ./examples/worker.js",
   },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
     "amqplib": "^0.4.1",
     "node-uuid": "^1.4.7",
-    "ramda": "^0.19.1",
     "rx": "^4.0.7"
   },
   "devDependencies": {
