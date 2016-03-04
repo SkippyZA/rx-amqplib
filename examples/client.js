@@ -1,8 +1,8 @@
 'use strict';
 
-let RxAmqpLib = require('../index.js');
+const RxAmqpLib = require('../index.js');
 
-let config = {
+const config = {
   queue: 'test_queue',
   host: 'amqp://localhost'
 };

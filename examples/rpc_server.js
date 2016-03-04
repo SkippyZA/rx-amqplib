@@ -1,8 +1,7 @@
-import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
-import RxMessage from '../rx-amqplib/RxMessage';
-import * as Rx from 'rx';
+'use strict';
 
-let fib = (n: number) => {
+const RxAmqpLib = require('../');
+const fib = (n) => {
   let a = 0;
   let b = 1;
 
@@ -15,8 +14,8 @@ let fib = (n: number) => {
   return a;
 };
 
-let reply = (message: RxMessage) => {
-  let number: number = parseInt(message.content.toString());
+let reply = (message) => {
+  let number= parseInt(message.content.toString());
   let fibResponse = fib(number);
 
   console.log(' [.] fib(%d)', number);

@@ -1,15 +1,13 @@
-let severities = process.argv.slice(2);
+'use strict';
+
+const RxAmqpLib = require('../');
+const Rx = require('rx');
+const severities = process.argv.slice(2);
 
 if (severities.length < 1) {
   console.warn('Usage: receive_logs_topic.ts [info] [warning] [error]');
   process.exit(1);
 }
-
-import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
-import RxConnection from '../rx-amqplib/RxConnection';
-import RxChannel from '../rx-amqplib/RxChannel';
-import * as Rx from 'rx';
-import * as R from 'ramda';
 
 const config = {
   host: 'amqp://localhost',

@@ -1,9 +1,8 @@
-import RxAmqpLib from '../rx-amqplib/RxAmqpLib';
-import * as UUID from 'node-uuid';
-import * as Rx from 'rx';
-import * as R from 'ramda';
+'use strict';
 
-let config = {
+const RxAmqpLib = require('../');
+const UUID = require('uuid');
+const config = {
   host: 'amqp://localhost',
   queue: 'rpc_queue'
 };
