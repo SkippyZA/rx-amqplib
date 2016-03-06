@@ -1,12 +1,21 @@
 import {Message} from 'amqplib/properties';
 import RxChannel from './RxChannel';
 
+/**
+ * RxMessage Class
+ */
 class RxMessage implements Message {
   content: Buffer;
   fields: any;
   properties: any;
   channel: RxChannel;
 
+  /**
+   * RxMessage constructor.
+   *
+   * @param message
+   * @param channel
+   */
   constructor(message: Message, channel?: RxChannel) {
     this.content = message.content;
     this.fields = message.fields;
@@ -14,6 +23,12 @@ class RxMessage implements Message {
     this.channel = channel;
   }
 
+  /**
+   * Reply to a message. This is used for RPC calls where the message contains a replyTo and correlationId property..
+   *
+   * @param buffer
+   * @returns boolean
+   */
   reply(buffer: Buffer): boolean {
     if (!(this.properties.replyTo || this.properties.correlationId)) {
       // @TODO: Decide if whether to throw error or return false
@@ -26,8 +41,22 @@ class RxMessage implements Message {
     });
   }
 
+  /**
+   * Acknowledge this message
+   *
+   * @param allUpTo
+   */
   ack(allUpTo?: boolean): void {
     return this.channel.ack(this, allUpTo);
+  }
+
+  /**
+   * Reject this message. If requeue is true, the message will be put back onto the queue it came from.
+   *
+   * @param requeue
+   */
+  nack(requeue?: boolean): void {
+    return this.channel.nack(this, false, requeue);
   }
 }
 
