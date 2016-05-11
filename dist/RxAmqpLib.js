@@ -1,3 +1,4 @@
+"use strict";
 var Rx = require('rx');
 var AmqpLib = require('amqplib');
 var RxConnection_1 = require('./RxConnection');
@@ -15,13 +16,28 @@ var RxAmqpLib = (function () {
      * @returns {RxConnection}
      */
     RxAmqpLib.newConnection = function (url, options) {
-        // Doing it like this to make it a cold observable. When starting with the promise directly, the node application
-        // stays open as AmqpLib connects straight away, and not when you subscribe to the stream.
-        return Rx.Observable.just(true)
-            .flatMap(function () { return Rx.Observable.fromPromise(AmqpLib.connect(url, options)); })
-            .map(function (connection) { return new RxConnection_1.default(connection); });
+        return Rx.Observable.create(function (obs) {
+            var openConn;
+            var sub = Rx.Observable.fromPromise(AmqpLib.connect(url, options))
+                .subscribe(function (conn) {
+                openConn = conn;
+                conn.on('error', function (e) {
+                    openConn = undefined;
+                    obs.onError(e);
+                });
+                conn.on('close', function () {
+                    openConn = undefined;
+                    obs.onCompleted();
+                });
+                obs.onNext(new RxConnection_1.default(conn));
+            }, function (e) { return obs.onError(e); });
+            return function () {
+                sub.dispose();
+                openConn && openConn.close();
+            };
+        });
     };
     return RxAmqpLib;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = RxAmqpLib;
