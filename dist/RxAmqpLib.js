@@ -1,4 +1,3 @@
-"use strict";
 var Rx = require('rx');
 var AmqpLib = require('amqplib');
 var RxConnection_1 = require('./RxConnection');
@@ -38,6 +37,6 @@ var RxAmqpLib = (function () {
         });
     };
     return RxAmqpLib;
-}());
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = RxAmqpLib;
