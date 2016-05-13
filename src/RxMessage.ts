@@ -1,4 +1,5 @@
 import {Message} from 'amqplib/properties';
+import {Options} from 'amqplib';
 import RxChannel from './RxChannel';
 
 /**
@@ -29,16 +30,16 @@ class RxMessage implements Message {
    * @param buffer
    * @returns boolean
    */
-  reply(buffer: Buffer): boolean {
+  reply(buffer: Buffer, options?: Options.Publish): boolean {
     if (!(this.properties.replyTo || this.properties.correlationId)) {
       // @TODO: Decide if whether to throw error or return false
       //throw Error('Message must contain a value for properties.replyTo and properties.correlationId');
       return false;
     }
 
-    return this.channel.sendToQueue(this.properties.replyTo, buffer, {
+    return this.channel.sendToQueue(this.properties.replyTo, buffer, (<any>Object).assign({}, options, {
       correlationId: this.properties.correlationId
-    });
+    }));
   }
 
   /**

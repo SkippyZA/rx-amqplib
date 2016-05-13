@@ -20,15 +20,15 @@ var RxMessage = (function () {
      * @param buffer
      * @returns boolean
      */
-    RxMessage.prototype.reply = function (buffer) {
+    RxMessage.prototype.reply = function (buffer, options) {
         if (!(this.properties.replyTo || this.properties.correlationId)) {
             // @TODO: Decide if whether to throw error or return false
             //throw Error('Message must contain a value for properties.replyTo and properties.correlationId');
             return false;
         }
-        return this.channel.sendToQueue(this.properties.replyTo, buffer, {
+        return this.channel.sendToQueue(this.properties.replyTo, buffer, Object.assign({}, options, {
             correlationId: this.properties.correlationId
-        });
+        }));
     };
     /**
      * Acknowledge this message
