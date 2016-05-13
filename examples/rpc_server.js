@@ -20,7 +20,7 @@ let reply = (message) => {
 
   console.log(' [.] fib(%d)', number);
 
-  message.reply(new Buffer(fibResponse.toString()));
+  message.reply(new Buffer(fibResponse.toString()), {appId: 'RxAmqpLib'});
   message.ack();
 };
 
