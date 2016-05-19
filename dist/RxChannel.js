@@ -1,3 +1,4 @@
+"use strict";
 var Rx = require('rx');
 var AssertQueueReply_1 = require('./reply/AssertQueueReply');
 var AssertExchangeReply_1 = require('./reply/AssertExchangeReply');
@@ -224,9 +225,17 @@ var RxChannel = (function () {
     RxChannel.prototype.consume = function (queue, options) {
         var _this = this;
         return Rx.Observable.create(function (observer) {
+            var tag, close$ = Rx.Observable.fromEvent(_this.channel, 'close'), closeSub = close$.subscribe(function () { return observer.onCompleted(); });
             _this.channel.consume(queue, function (msg) {
                 observer.onNext(new RxMessage_1.default(msg, _this));
-            }, options);
+            }, options).then(function (r) { return tag = r.consumerTag; });
+            return function () {
+                closeSub.dispose();
+                try {
+                    _this.cancel(tag);
+                }
+                catch (e) { } // This prevents a race condition
+            };
         });
     };
     /**
@@ -337,6 +346,6 @@ var RxChannel = (function () {
             .map(function (reply) { return new EmptyReply_1.default(_this); });
     };
     return RxChannel;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = RxChannel;
