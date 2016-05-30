@@ -1,3 +1,4 @@
+"use strict";
 /**
  * RxMessage Class
  */
@@ -47,6 +48,6 @@ var RxMessage = (function () {
         return this.channel.nack(this, false, requeue);
     };
     return RxMessage;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = RxMessage;

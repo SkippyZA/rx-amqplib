@@ -1,3 +1,4 @@
+"use strict";
 var AssertQueueReply = (function () {
     function AssertQueueReply(channel, reply) {
         this.channel = channel;
@@ -6,6 +7,6 @@ var AssertQueueReply = (function () {
         this.consumerCount = reply.consumerCount;
     }
     return AssertQueueReply;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = AssertQueueReply;

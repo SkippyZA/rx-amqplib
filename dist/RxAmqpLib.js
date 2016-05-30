@@ -21,10 +21,21 @@ var RxAmqpLib = (function () {
         return Rx.Observable
             .defer(function () { return AmqpLib.connect(url, options); })
             .flatMap(function (conn) {
-            return Rx.Observable.using(function () { return Rx.Disposable.create(function () { return conn.close(); }); }, function (resource) {
-                return Rx.Observable.merge(Rx.Observable.of(new RxConnection_1.default(conn)), Rx.Observable.fromEvent(conn, 'error').flatMap(function (e) { return Rx.Observable.throw(e); }))
-                    .takeUntil(Rx.Observable.fromEvent(conn, 'close'));
-            });
+            // Disposable observable to close connection
+            var connectionDisposer = Rx.Disposable.create(function () { return conn.close().catch(function (err) { return Rx.Observable.throw(err); }); });
+            // New RxConnection stream
+            var sourceConnection = Rx.Observable.of(new RxConnection_1.default(conn));
+            // Stream of close events from connection
+            var closeEvents = Rx.Observable.fromEvent(conn, 'close');
+            // Stream of Errors from error connection event
+            var errorEvents = Rx.Observable.fromEvent(conn, 'error')
+                .flatMap(function (error) { return Rx.Observable.throw(error); });
+            // Stream of open connections, that will emit RxConnection until a close event
+            var connection = Rx.Observable
+                .merge(sourceConnection, errorEvents)
+                .takeUntil(closeEvents);
+            // Return the disposable connection resource
+            return Rx.Observable.using(function () { return connectionDisposer; }, function () { return connection; });
         });
     };
     return RxAmqpLib;

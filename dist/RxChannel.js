@@ -225,7 +225,9 @@ var RxChannel = (function () {
     RxChannel.prototype.consume = function (queue, options) {
         var _this = this;
         return Rx.Observable.create(function (observer) {
-            var tag, close$ = Rx.Observable.fromEvent(_this.channel, 'close'), closeSub = close$.subscribe(function () { return observer.onCompleted(); });
+            var tag;
+            var close$ = Rx.Observable.fromEvent(_this.channel, 'close');
+            var closeSub = close$.subscribe(function () { return observer.onCompleted(); });
             _this.channel.consume(queue, function (msg) {
                 observer.onNext(new RxMessage_1.default(msg, _this));
             }, options).then(function (r) { return tag = r.consumerTag; });
@@ -234,7 +236,8 @@ var RxChannel = (function () {
                 try {
                     _this.cancel(tag);
                 }
-                catch (e) { } // This prevents a race condition
+                catch (e) {
+                } // This prevents a race condition
             };
         });
     };

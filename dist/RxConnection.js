@@ -1,3 +1,4 @@
+"use strict";
 var Rx = require('rx');
 var RxChannel_1 = require('./RxChannel');
 /**
@@ -32,6 +33,6 @@ var RxConnection = (function () {
         return Rx.Observable.fromPromise(this.connection.close());
     };
     return RxConnection;
-})();
+}());
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = RxConnection;
