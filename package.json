@@ -30,13 +30,13 @@
     "example-rcp-client": "gulp && node ./examples/rpc_client.js",
     "example-rcp-server": "gulp && node ./examples/rpc_server.js",
     "example-server": "gulp && node ./examples/server.js",
-    "example-worker": "gulp && node ./examples/worker.js",
+    "example-worker": "gulp && node ./examples/worker.js"
   },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
     "amqplib": "^0.4.1",
     "node-uuid": "^1.4.7",
-    "rx": "^4.0.7"
+    "rx": "^4.1.0"
   },
   "devDependencies": {
     "del": "^2.2.0",
