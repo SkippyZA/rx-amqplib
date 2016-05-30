@@ -16,11 +16,31 @@ class RxAmqpLib {
    * @returns {RxConnection}
    */
   public static newConnection(url: string, options?: any): Rx.Observable<RxConnection> {
-    // Doing it like this to make it a cold observable. When starting with the promise directly, the node application
-    // stays open as AmqpLib connects straight away, and not when you subscribe to the stream.
-    return Rx.Observable.just(true)
-      .flatMap(() => Rx.Observable.fromPromise(AmqpLib.connect(url, options)))
-      .map(connection => new RxConnection(connection));
+    return Rx.Observable.create((obs: Rx.Observer<RxConnection>) => {
+      var openConn: Connection;
+
+      var sub = Rx.Observable.fromPromise(AmqpLib.connect(url, options))
+        .subscribe((conn: Connection) => {
+          openConn = conn;
+
+          conn.on('error', (e: any) => {
+            openConn = undefined;
+            obs.onError(e);
+          });
+
+          conn.on('close', () => {
+            openConn = undefined;
+            obs.onCompleted();
+          });
+
+          obs.onNext(new RxConnection(conn));
+        }, e => obs.onError(e));
+
+      return () => {
+        sub.dispose();
+        openConn && openConn.close();
+      }
+    });
   }
 }
 
