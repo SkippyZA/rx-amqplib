@@ -128,7 +128,7 @@ class RxChannel {
    * @returns {Rx.Observable<AssertExchangeReply>}
    */
   public assertExchange(exchange: string, type: string, options?: Options.AssertExchange):
-    Rx.Observable<AssertExchangeReply> {
+      Rx.Observable<AssertExchangeReply> {
 
     return Rx.Observable.fromPromise(this.channel.assertExchange(exchange, type, options))
       .map(reply => new AssertExchangeReply(this, reply))
@@ -231,21 +231,22 @@ class RxChannel {
    */
   public consume(queue: string, options?: Options.Consume): Rx.Observable<RxMessage> {
     return <Rx.Observable<RxMessage>> Rx.Observable.create(observer => {
-        let tag: string,
-          close$ = Rx.Observable.fromEvent(this.channel, 'close'),
-          closeSub = close$.subscribe(() => observer.onCompleted());
+      let tag: string;
+      let close$ = Rx.Observable.fromEvent(this.channel, 'close');
+      let closeSub = close$.subscribe(() => observer.onCompleted());
 
-        this.channel.consume(queue, (msg: Message) => {
-          observer.onNext(new RxMessage(msg, this));
-        }, options).then(r => tag = r.consumerTag);
+      this.channel.consume(queue, (msg: Message) => {
+        observer.onNext(new RxMessage(msg, this));
+      }, options).then(r => tag = r.consumerTag);
 
-        return () => {
-          closeSub.dispose();
-          try {
-            this.cancel(tag);
-          } catch (e) {} // This prevents a race condition
-        }
-      });
+      return () => {
+        closeSub.dispose();
+        try {
+          this.cancel(tag);
+        } catch (e) {
+        } // This prevents a race condition
+      }
+    });
   }
 
   /**
