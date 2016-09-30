@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="../typings/index.d.ts" />
 var Rx = require('rx');
 var AmqpLib = require('amqplib');
 var RxConnection_1 = require('./RxConnection');

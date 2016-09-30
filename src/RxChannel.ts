@@ -232,7 +232,7 @@ class RxChannel {
   public consume(queue: string, options?: Options.Consume): Rx.Observable<RxMessage> {
     return <Rx.Observable<RxMessage>> Rx.Observable.create(observer => {
       let tag: string;
-      let close$ = Rx.Observable.fromEvent(this.channel, 'close');
+      let close$ = Rx.Observable.fromEvent(<any> this.channel, 'close');
       let closeSub = close$.subscribe(() => observer.onCompleted());
 
       this.channel.consume(queue, (msg: Message) => {

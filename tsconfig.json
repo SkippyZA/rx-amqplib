@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "outDir": "dist",
         "target": "es5",
         "sourceMap": false,
         "module": "commonjs",
@@ -7,7 +8,8 @@
         "preserveConstEnums": true
     },
     "compileOnSave": false,
-    "filesGlob": [
-        "src/**/*.ts"
+    "files": [
+        "./src/RxAmqpLib.ts",
+        "./typings/index.d.ts"
     ]
 }

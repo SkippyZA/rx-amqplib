@@ -1,3 +1,4 @@
+/// <reference path="../typings/index.d.ts" />
 import * as Rx from 'rx';
 import * as AmqpLib from 'amqplib';
 import RxConnection from './RxConnection';
@@ -27,9 +28,9 @@ class RxAmqpLib {
         // New RxConnection stream
         const sourceConnection = Rx.Observable.of(new RxConnection(conn));
         // Stream of close events from connection
-        const closeEvents = Rx.Observable.fromEvent(conn, 'close');
+        const closeEvents = Rx.Observable.fromEvent(<any> conn, 'close');
         // Stream of Errors from error connection event
-        const errorEvents = Rx.Observable.fromEvent(conn, 'error')
+        const errorEvents = Rx.Observable.fromEvent(<any> conn, 'error')
           .flatMap((error: any) => Rx.Observable.throw(error));
         // Stream of open connections, that will emit RxConnection until a close event
         const connection = Rx.Observable
