@@ -20,6 +20,7 @@
   },
   "main": "src/RxAmqpLib.ts",
   "scripts": {
+    "lint": "node_modules/.bin/tslint --config=tslint.json --project=tsconfig.json",
     "build": "gulp",
     "example-client": "gulp && node ./examples/client.js",
     "example-emit-logs-direct": "gulp && node ./examples/emit_log_direct.js",
@@ -41,14 +42,8 @@
     "rx": "^4.1.0"
   },
   "devDependencies": {
-    "del": "^2.2.0",
-    "gulp": "^3.8.11",
-    "gulp-debug": "^2.0.1",
-    "gulp-inject": "^1.2.0",
-    "gulp-rimraf": "^0.1.1",
-    "gulp-sourcemaps": "^1.5.1",
-    "gulp-tslint": "^1.4.4",
-    "gulp-typescript": "^2.5.0",
+    "nodemon": "^1.11.0",
+    "tslint": "^3.15.1",
     "typescript": "^2.0.3"
   }
 }
