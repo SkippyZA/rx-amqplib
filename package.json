@@ -20,8 +20,13 @@
   },
   "main": "src/RxAmqpLib.ts",
   "scripts": {
-    "lint": "node_modules/.bin/tslint --config=tslint.json --project=tsconfig.json",
-    "build": "gulp",
+    "clean": "node_modules/.bin/rimraf dist/*",
+    "compile:ts": "node_modules/.bin/tsc",
+    "build:lint": "node_modules/.bin/tslint --config=tslint.json --project=tsconfig.json",
+    "prebuild": "npm run clean && npm run build:lint",
+    "build": "npm run prebuild && npm run compile:ts",
+
+
     "example-client": "gulp && node ./examples/client.js",
     "example-emit-logs-direct": "gulp && node ./examples/emit_log_direct.js",
     "example-emit-logs-topic": "gulp && node ./examples/emit_log_topic.js",
@@ -43,6 +48,7 @@
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
+    "rimraf": "^2.5.4",
     "tslint": "^3.15.1",
     "typescript": "^2.0.3"
   }
