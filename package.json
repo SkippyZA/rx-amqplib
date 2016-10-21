@@ -21,24 +21,22 @@
   "main": "src/RxAmqpLib.ts",
   "scripts": {
     "clean": "node_modules/.bin/rimraf dist/*",
-    "compile:ts": "node_modules/.bin/tsc",
     "build:lint": "node_modules/.bin/tslint --config=tslint.json --project=tsconfig.json",
-    "prebuild": "npm run clean && npm run build:lint",
-    "build": "npm run prebuild && npm run compile:ts",
+    "build:ts": "node_modules/.bin/tsc",
+    "build": "npm run lint && npm run build:ts",
 
-
-    "example-client": "gulp && node ./examples/client.js",
-    "example-emit-logs-direct": "gulp && node ./examples/emit_log_direct.js",
-    "example-emit-logs-topic": "gulp && node ./examples/emit_log_topic.js",
-    "example-emit-logs": "gulp && node ./examples/emit_logs.js",
-    "example-new-task": "gulp && node ./examples/new_task.js",
-    "example-receive-logs": "gulp && node ./examples/receive_logs.js",
-    "example-receive-logs-direct": "gulp && node ./examples/receive_logs_direct.js",
-    "example-receive-logs-topic": "gulp && node ./examples/receive_logs_topic.js",
-    "example-rcp-client": "gulp && node ./examples/rpc_client.js",
-    "example-rcp-server": "gulp && node ./examples/rpc_server.js",
-    "example-server": "gulp && node ./examples/server.js",
-    "example-worker": "gulp && node ./examples/worker.js"
+    "example-client": "npm run build && node ./examples/client.js",
+    "example-emit-logs-direct": "npm run build && node ./examples/emit_log_direct.js",
+    "example-emit-logs-topic": "npm run build && node ./examples/emit_log_topic.js",
+    "example-emit-logs": "npm run build && node ./examples/emit_logs.js",
+    "example-new-task": "npm run build && node ./examples/new_task.js",
+    "example-receive-logs": "npm run build && node ./examples/receive_logs.js",
+    "example-receive-logs-direct": "npm run build && node ./examples/receive_logs_direct.js",
+    "example-receive-logs-topic": "npm run build && node ./examples/receive_logs_topic.js",
+    "example-rcp-client": "npm run build && node ./examples/rpc_client.js",
+    "example-rcp-server": "npm run build && node ./examples/rpc_server.js",
+    "example-server": "npm run build && node ./examples/server.js",
+    "example-worker": "npm run build && node ./examples/worker.js"
   },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
