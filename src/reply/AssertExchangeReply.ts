@@ -1,11 +1,20 @@
-import {Replies} from 'amqplib/properties';
+import {Replies as AmqplibReply} from 'amqplib/properties';
 import RxChannel from '../RxChannel';
 
-class AssertExchangeReply implements Replies.AssertExchange {
+/**
+ * AssertExchange reply message when executing `assertExchange` on a `RxChannel`
+ */
+class AssertExchangeReply implements AmqplibReply.AssertExchange {
   public channel: RxChannel;
   public exchange: string;
 
-  constructor(channel: RxChannel, reply: Replies.AssertExchange) {
+  /**
+   * Class constructor.
+   *
+   * @param channel
+   * @param reply
+   */
+  constructor(channel: RxChannel, reply: AmqplibReply.AssertExchange) {
     this.channel = channel;
     this.exchange = reply.exchange;
   }

@@ -1,5 +1,5 @@
 import * as Rx from 'rx';
-import {Connection, Channel, Options} from 'amqplib';
+import {Channel, Options} from 'amqplib';
 import {Message} from 'amqplib/properties';
 import AssertQueueReply from './reply/AssertQueueReply';
 import AssertExchangeReply from './reply/AssertExchangeReply';
