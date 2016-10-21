@@ -84,11 +84,11 @@ RxAmqpLib.newConnection(config.host)
 
 ## Build it Yourself
 
-Should you wish to build the library yourself, either for personal use, or for contribution, please ensure there are no errors emitted during the build process with `gulp`.
+Should you wish to build the library yourself, either for personal use, or for contribution, please ensure there are no errors emitted during the build process with `npm run build`.
 
 ```
 $ git clone git@github.com:SkippyZA/rx-amqplib.git
 $ cd rx-amqplib
 $ npm install
-$ gulp
+$ npm run build
 ```
