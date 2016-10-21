@@ -1,11 +1,20 @@
-import {Replies} from 'amqplib/properties';
+import {Replies as AmqplibReply} from 'amqplib/properties';
 import RxChannel from '../RxChannel';
 
-class DeleteQueueReply implements Replies.DeleteQueue {
+/**
+ * Reply message from `RxChannel`.`deleteQueue`
+ */
+class DeleteQueueReply implements AmqplibReply.DeleteQueue {
   channel: RxChannel;
   messageCount: number;
 
-  constructor(channel: RxChannel, deleteQueue: Replies.DeleteQueue) {
+  /**
+   * Class constructor.
+   *
+   * @param channel
+   * @param deleteQueue
+   */
+  constructor(channel: RxChannel, deleteQueue: AmqplibReply.DeleteQueue) {
     this.channel = channel;
     this.messageCount = deleteQueue.messageCount;
   }
