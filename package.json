@@ -23,7 +23,7 @@
     "clean": "node_modules/.bin/rimraf dist/*",
     "build:lint": "node_modules/.bin/tslint --config=tslint.json --project=tsconfig.json",
     "build:ts": "node_modules/.bin/tsc",
-    "build": "npm run lint && npm run build:ts",
+    "build": "npm run build:lint && npm run build:ts",
 
     "example-client": "npm run build && node ./examples/client.js",
     "example-emit-logs-direct": "npm run build && node ./examples/emit_log_direct.js",
