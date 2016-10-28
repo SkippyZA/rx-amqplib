@@ -1,4 +1,4 @@
-import * as Rx from 'rx';
+import { Observable } from 'rxjs';
 import RxChannel from './RxChannel';
 import {Connection, Channel, Options} from 'amqplib';
 
@@ -19,8 +19,8 @@ class RxConnection {
    *
    * @returns {any}
    */
-  public createChannel(): Rx.Observable<RxChannel> {
-    return Rx.Observable.fromPromise(this.connection.createChannel())
+  public createChannel(): Observable<RxChannel> {
+    return Observable.fromPromise(this.connection.createChannel())
       .map((channel: Channel) => new RxChannel(channel));
   }
 
@@ -29,10 +29,10 @@ class RxConnection {
    * you've done everything you need to before calling this. Will be resolved once the connection, and underlying
    * socket, are closed.
    *
-   * @returns Rx.Observable<void>
+   * @returns Observable<void>
    */
-  public close(): Rx.Observable<void> {
-    return Rx.Observable.fromPromise(this.connection.close());
+  public close(): Observable<void> {
+    return Observable.fromPromise<void>(this.connection.close());
   }
 }
 

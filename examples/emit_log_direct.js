@@ -15,7 +15,7 @@ RxAmqpLib.newConnection(config.host)
   .flatMap(connection => connection
     .createChannel()
     .flatMap(channel => channel.assertExchange(config.exchange, config.exchangeType, { durable: false }))
-    .doOnNext(reply => reply.channel.publish(config.exchange, severity, new Buffer(message)))
+    .do(reply => reply.channel.publish(config.exchange, severity, new Buffer(message)))
     .flatMap(reply => reply.channel.close())
     .flatMap(() => connection.close())
   )

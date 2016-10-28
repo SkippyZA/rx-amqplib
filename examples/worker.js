@@ -12,9 +12,9 @@ RxAmqpLib.newConnection(config.host)
   .flatMap(channel => channel.assertQueue(config.queue, { durable: true }))
   .flatMap(reply => reply.channel.prefetch(1))
   .flatMap(reply => reply.channel.consume(config.queue, { noAck: false }))
-  .doOnNext(message => console.log('[x] Received: %s', message.content.toString()))
+  .do(message => console.log('[x] Received: %s', message.content.toString()))
   .delay(2000)
-  .doOnNext(reply => reply.ack())
+  .do(reply => reply.ack())
   .subscribe(() => console.log('[ ] Done\n'), console.error);
 
 
