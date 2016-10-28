@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/12f9b621f914fe2b9486a74e0f2e130621837bfc/node-uuid/node-uuid-base.d.ts",
-    "raw": "github:DefinitelyTyped/DefinitelyTyped/node-uuid/node-uuid-base.d.ts#12f9b621f914fe2b9486a74e0f2e130621837bfc",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/12f9b621f914fe2b9486a74e0f2e130621837bfc/node-uuid/node-uuid-base.d.ts"
-  }
-}
