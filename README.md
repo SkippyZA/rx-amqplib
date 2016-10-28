@@ -1,19 +1,20 @@
 # RxJS wrapper for amqplib
+
 rx-amqplib is a wrapper for using the squaremo amqplib NodeJS package with RxJS.
 
 ## Gettings started
 
 To include this library in your project, all you need to do is install it using NPM.
 
-```
-$ npm install rx-amqplib --save
+```sh
+npm install rx-amqplib --save
 ```
 
 ## Examples
 
 Here is a basic example of creating a connection to a RabbitMQ server, creating a channel + queue and sneding a message to the queue.
 
-```javascript
+```js
 const config = {
   queue: 'test_queue',
   host: 'amqp://localhost'
@@ -24,7 +25,7 @@ RxAmqpLib.newConnection(config.host)
   .flatMap(connection => connection
     .createChannel()
     .flatMap(channel => channel.assertQueue(config.queue, { durable: false }))
-    .doOnNext(reply => reply.channel.sendToQueue(config.queue, new Buffer('Test message')))
+    .do(reply => reply.channel.sendToQueue(config.queue, new Buffer('Test message')))
     .flatMap(reply => reply.channel.close())
     .flatMap(() => connection.close())
   )
@@ -33,7 +34,7 @@ RxAmqpLib.newConnection(config.host)
 
 ## More Examples
 
-1. ### Hello World
+* ### Hello World
 
    [Server](./examples/server.js), [Client](./examples/client.js)
 
@@ -41,7 +42,7 @@ RxAmqpLib.newConnection(config.host)
 
    ![](https://www.rabbitmq.com/img/tutorials/python-one.png "Hello world queue")
 
-2. ### Work Queues
+* ### Work Queues
 
    [New task](./examples/new_task.js), [Worker](./examples/worker.js)
 
@@ -49,7 +50,7 @@ RxAmqpLib.newConnection(config.host)
 
    ![](https://www.rabbitmq.com/img/tutorials/python-two.png "Worker queue")
 
-3. ### Publish/Subscribe
+* ### Publish/Subscribe
 
    [Emit logs](./examples/emit_logs.js), [Receive logs](./examples/receive_logs.js)
 
@@ -57,7 +58,7 @@ RxAmqpLib.newConnection(config.host)
 
    ![](https://www.rabbitmq.com/img/tutorials/python-three.png "Publish/Subscribe Queue")
 
-4. ### Routing
+* ### Routing
 
    [Emit log](./examples/emit_log_direct.js), [Receive logs](./examples/receive_logs_direct.js)
 
@@ -65,7 +66,7 @@ RxAmqpLib.newConnection(config.host)
 
    ![](https://www.rabbitmq.com/img/tutorials/python-four.png "Routing Queue")
 
-5. ### Topics
+* ### Topics
 
    [Emit log](./examples/emit_log_topic.js), [Receive logs](./examples/receive_logs_topic.js)
 
@@ -73,7 +74,7 @@ RxAmqpLib.newConnection(config.host)
 
    ![](https://www.rabbitmq.com/img/tutorials/python-five.png "Topic Queue")
 
-6. ### RPC
+* ### RPC
 
    [RPC Server](./examples/rpc_server.js), [RPC Client](./examples/rpc_client.js)
 
@@ -81,14 +82,13 @@ RxAmqpLib.newConnection(config.host)
 
    ![](https://www.rabbitmq.com/img/tutorials/python-six.png "RPC Queue")
 
-
 ## Build it Yourself
 
-Should you wish to build the library yourself, either for personal use, or for contribution, please ensure there are no errors emitted during the build process with `npm run build`.
+Should you wish to build the library yourself, either for personal use or for contribution, please ensure there are no errors emitted during the build process with `npm run build`.
 
-```
-$ git clone git@github.com:SkippyZA/rx-amqplib.git
-$ cd rx-amqplib
-$ npm install
-$ npm run build
+```sh
+git clone git@github.com:SkippyZA/rx-amqplib.git
+cd rx-amqplib
+npm install
+npm run build
 ```
