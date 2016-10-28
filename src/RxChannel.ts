@@ -232,7 +232,7 @@ class RxChannel {
   public consume(queue: string, options?: Options.Consume): Observable<RxMessage> {
     return Observable.create((observer: Observer<RxMessage>) => {
       let tag: string;
-      let close$ = Observable.fromEvent(<any> this.channel, 'close');
+      let close$ = Observable.fromEvent(this.channel, 'close');
       let closeSub = close$.subscribe(() => observer.complete());
 
       this.channel.consume(queue, (msg: Message) => {
@@ -241,10 +241,8 @@ class RxChannel {
 
       return () => {
         closeSub.unsubscribe();
-        try {
-          this.cancel(tag);
-        } catch (e) {
-        } // This prevents a race condition
+        this.cancel(tag)
+          .onErrorResumeNext(Observable.of(false));
       }
     });
   }
