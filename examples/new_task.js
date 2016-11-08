@@ -11,7 +11,7 @@ RxAmqpLib.newConnection(config.host)
   .flatMap(connection => connection
     .createChannel()
     .flatMap(channel => channel.assertQueue(config.queue, { durable: true }))
-    .doOnNext(assertQueueReply => {
+    .do(assertQueueReply => {
       assertQueueReply.channel.sendToQueue(config.queue, new Buffer('Task'), { deliveryMode: true });
       console.log('[x] Task sent to queue');
     })

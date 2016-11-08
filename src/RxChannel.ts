@@ -1,5 +1,5 @@
-import * as Rx from 'rx';
-import {Channel, Options} from 'amqplib';
+import { Observable, Observer } from 'rxjs';
+import {Connection, Channel, Options, Replies} from 'amqplib';
 import {Message} from 'amqplib/properties';
 import AssertQueueReply from './reply/AssertQueueReply';
 import AssertExchangeReply from './reply/AssertExchangeReply';
@@ -24,10 +24,10 @@ class RxChannel {
   /**
    * Close a channel.
    *
-   * @returns Rx.Observable<void>
+   * @returns Observable<void>
    */
-  public close(): Rx.Observable<void> {
-    return Rx.Observable.fromPromise(this.channel.close())
+  public close(): Observable<void> {
+    return Observable.fromPromise<void>(this.channel.close())
   }
 
   /**
@@ -38,11 +38,11 @@ class RxChannel {
    *
    * @param queue
    * @param options
-   * @returns Rx.Observable<AssertQueueReply>
+   * @returns Observable<AssertQueueReply>
    */
-  public assertQueue(queue: string, options: Options.AssertQueue): Rx.Observable<AssertQueueReply> {
-    return Rx.Observable.fromPromise(this.channel.assertQueue(queue, options))
-      .map(reply => new AssertQueueReply(this, reply));
+  public assertQueue(queue: string, options: Options.AssertQueue): Observable<AssertQueueReply> {
+    return Observable.fromPromise(this.channel.assertQueue(queue, options))
+      .map((reply: Replies.AssertQueue) => new AssertQueueReply(this, reply));
   }
 
   /**
@@ -50,11 +50,11 @@ class RxChannel {
    * you go through to the next round!
    *
    * @param queue
-   * @returns Rx.Observable<AssertQueueReply>
+   * @returns Observable<AssertQueueReply>
    */
-  checkQueue(queue: string): Rx.Observable<AssertQueueReply> {
-    return Rx.Observable.fromPromise(this.channel.checkQueue(queue))
-      .map(reply => new AssertQueueReply(this, reply));
+  checkQueue(queue: string): Observable<AssertQueueReply> {
+    return Observable.fromPromise(this.channel.checkQueue(queue))
+      .map((reply: Replies.AssertQueue) => new AssertQueueReply(this, reply));
   }
 
   /**
@@ -68,11 +68,11 @@ class RxChannel {
    *
    * @param queue
    * @param options
-   * @returns Rx.Observable<DeleteQueueReply>
+   * @returns Observable<DeleteQueueReply>
    */
-  deleteQueue(queue: string, options?: Options.DeleteQueue): Rx.Observable<DeleteQueueReply> {
-    return Rx.Observable.fromPromise(this.channel.deleteQueue(queue, options))
-      .map(reply => new DeleteQueueReply(this, reply));
+  deleteQueue(queue: string, options?: Options.DeleteQueue): Observable<DeleteQueueReply> {
+    return Observable.fromPromise(this.channel.deleteQueue(queue, options))
+      .map((reply: Replies.DeleteQueue) => new DeleteQueueReply(this, reply));
   }
 
   /**
@@ -81,11 +81,11 @@ class RxChannel {
    * channel to which they were delivered closes without acknowledging them).
    *
    * @param queue
-   * @returns Rx.Observable<PurgeQueueReply>
+   * @returns Observable<PurgeQueueReply>
    */
-  purgeQueue(queue: string): Rx.Observable<PurgeQueueReply> {
-    return Rx.Observable.fromPromise(this.channel.purgeQueue(queue))
-      .map(reply => new PurgeQueueReply(this, reply));
+  purgeQueue(queue: string): Observable<PurgeQueueReply> {
+    return Observable.fromPromise(this.channel.purgeQueue(queue))
+      .map((reply: Replies.PurgeQueue) => new PurgeQueueReply(this, reply));
   }
 
   /**
@@ -96,10 +96,10 @@ class RxChannel {
    * @param source
    * @param pattern
    * @param args
-   * @returns Rx.Observable<EmptyReply>
+   * @returns Observable<EmptyReply>
    */
-  public bindQueue(queue: string, source: string, pattern: string, args?: any): Rx.Observable<EmptyReply> {
-    return Rx.Observable.just(this.channel.bindQueue(queue, source, pattern, args))
+  public bindQueue(queue: string, source: string, pattern: string, args?: any): Observable<EmptyReply> {
+    return Observable.of(this.channel.bindQueue(queue, source, pattern, args))
       .map(() => new EmptyReply(this))
   }
 
@@ -112,10 +112,10 @@ class RxChannel {
    * @param source
    * @param pattern
    * @param args
-   * @returns Rx.Observable<EmptyRole>
+   * @returns Observable<EmptyRole>
    */
-  unbindQueue(queue: string, source: string, pattern: string, args?: any): Rx.Observable<EmptyReply> {
-    return Rx.Observable.just(this.channel.unbindQueue(queue, source, pattern, args))
+  unbindQueue(queue: string, source: string, pattern: string, args?: any): Observable<EmptyReply> {
+    return Observable.of(this.channel.unbindQueue(queue, source, pattern, args))
       .map(() => new EmptyReply(this));
   }
 
@@ -125,13 +125,13 @@ class RxChannel {
    * @param exchange
    * @param type
    * @param options
-   * @returns {Rx.Observable<AssertExchangeReply>}
+   * @returns {Observable<AssertExchangeReply>}
    */
   public assertExchange(exchange: string, type: string, options?: Options.AssertExchange):
-      Rx.Observable<AssertExchangeReply> {
+      Observable<AssertExchangeReply> {
 
-    return Rx.Observable.fromPromise(this.channel.assertExchange(exchange, type, options))
-      .map(reply => new AssertExchangeReply(this, reply))
+    return Observable.fromPromise(this.channel.assertExchange(exchange, type, options))
+      .map((reply: Replies.AssertExchange) => new AssertExchangeReply(this, reply))
   };
 
   /**
@@ -139,10 +139,10 @@ class RxChannel {
    * happy days.
    *
    * @param exchange
-   * @returns Rx.Observable<EmptyReply>
+   * @returns Observable<EmptyReply>
    */
-  checkExchange(exchange: string): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.checkExchange(exchange))
+  checkExchange(exchange: string): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.checkExchange(exchange))
       .map(reply => new EmptyReply(this));
   }
 
@@ -157,10 +157,10 @@ class RxChannel {
    *
    * @param exchange
    * @param options
-   * @returns Rx.Observable<EmptyReply>
+   * @returns Observable<EmptyReply>
    */
-  deleteExchange(exchange: string, options?: Options.DeleteExchange): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.deleteExchange(exchange, options))
+  deleteExchange(exchange: string, options?: Options.DeleteExchange): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.deleteExchange(exchange, options))
       .map(reply => new EmptyReply(this));
   }
 
@@ -173,10 +173,10 @@ class RxChannel {
    * @param source
    * @param pattern
    * @param args
-   * @returns Rx.Observable<EmptyReply>
+   * @returns Observable<EmptyReply>
    */
-  bindExchange(destination: string, source: string, pattern: string, args?: any): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.bindExchange(destination, source, pattern, args))
+  bindExchange(destination: string, source: string, pattern: string, args?: any): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.bindExchange(destination, source, pattern, args))
       .map(reply => new EmptyReply(this));
   }
 
@@ -189,10 +189,10 @@ class RxChannel {
    * @param source
    * @param pattern
    * @param args
-   * @returns Rx.Observable<EmtpyReply>
+   * @returns Observable<EmtpyReply>
    */
-  unbindExchange(destination: string, source: string, pattern: string, args?: any): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.unbindExchange(destination, source, pattern, args))
+  unbindExchange(destination: string, source: string, pattern: string, args?: any): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.unbindExchange(destination, source, pattern, args))
       .map(reply => new EmptyReply(this));
   }
 
@@ -227,24 +227,22 @@ class RxChannel {
    *
    * @param queue
    * @param options
-   * @returns {Rx.Observable<RxMessage>}
+   * @returns {Observable<RxMessage>}
    */
-  public consume(queue: string, options?: Options.Consume): Rx.Observable<RxMessage> {
-    return <Rx.Observable<RxMessage>> Rx.Observable.create(observer => {
+  public consume(queue: string, options?: Options.Consume): Observable<RxMessage> {
+    return Observable.create((observer: Observer<RxMessage>) => {
       let tag: string;
-      let close$ = Rx.Observable.fromEvent(<any> this.channel, 'close');
-      let closeSub = close$.subscribe(() => observer.onCompleted());
+      let close$ = Observable.fromEvent(this.channel, 'close');
+      let closeSub = close$.subscribe(() => observer.complete());
 
       this.channel.consume(queue, (msg: Message) => {
-        observer.onNext(new RxMessage(msg, this));
+        observer.next(new RxMessage(msg, this));
       }, options).then(r => tag = r.consumerTag);
 
       return () => {
-        closeSub.dispose();
-        try {
-          this.cancel(tag);
-        } catch (e) {
-        } // This prevents a race condition
+        closeSub.unsubscribe();
+        this.cancel(tag)
+          .onErrorResumeNext(Observable.of(false));
       }
     });
   }
@@ -255,10 +253,10 @@ class RxChannel {
    * for the consumer, i.e., the message callback will no longer be invoked.
    *
    * @param consumerTag
-   * @returns Rx.Observable<EmptyReply>
+   * @returns Observable<EmptyReply>
    */
-  public cancel(consumerTag: string): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.cancel(consumerTag))
+  public cancel(consumerTag: string): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.cancel(consumerTag))
       .map(reply => new EmptyReply(this));
   }
 
@@ -273,10 +271,10 @@ class RxChannel {
    * @TODO: Review this comment
    * @param queue
    * @param options
-   * @returns Rx.Observable<RxMessage>
+   * @returns Observable<RxMessage>
    */
-  public get(queue: string, options?: Options.Get): Rx.Observable<RxMessage> {
-    return Rx.Observable.fromPromise(this.channel.get(queue, options))
+  public get(queue: string, options?: Options.Get): Observable<RxMessage> {
+    return Observable.fromPromise(this.channel.get(queue, options))
       .filter(message => message !== false)
       .map(message => new RxMessage(<Message> message, this));
   }
@@ -344,10 +342,10 @@ class RxChannel {
    *
    * @param count
    * @param global
-   * @returns {Rx.Observable<EmptyReply>}
+   * @returns {Observable<EmptyReply>}
    */
-  public prefetch(count: number, global?: boolean): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.prefetch(count, global))
+  public prefetch(count: number, global?: boolean): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.prefetch(count, global))
       .map(reply => new EmptyReply(this));
   }
 
@@ -356,8 +354,8 @@ class RxChannel {
    *
    * @returns Rx.Observabel<EmptyReply>
    */
-  public recover(): Rx.Observable<EmptyReply> {
-    return Rx.Observable.fromPromise(this.channel.recover())
+  public recover(): Observable<EmptyReply> {
+    return Observable.fromPromise(this.channel.recover())
       .map(reply => new EmptyReply(this));
   }
 }

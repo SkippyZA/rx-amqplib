@@ -25,7 +25,7 @@ RxAmqpLib.newConnection(config.host)
     .bufferWithCount(severities.length)
     .map(() => reply)
   )
-  .doOnNext(() => console.log(' [*] Waiting for logs.'))
+  .do(() => console.log(' [*] Waiting for logs.'))
   .flatMap(reply => reply.channel.consume(reply.queue, { noAck: true }))
   .subscribe(
     msg => console.log(' [x] %s: \'%s\'', msg.fields.routingKey, msg.content.toString()),

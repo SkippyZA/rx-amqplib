@@ -1,5 +1,5 @@
-import {Message} from 'amqplib/properties';
-import {Options} from 'amqplib';
+import { Message } from 'amqplib/properties';
+import { Options } from 'amqplib';
 import RxChannel from './RxChannel';
 
 /**

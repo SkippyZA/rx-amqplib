@@ -1,6 +1,6 @@
 {
   "name": "rx-amqplib",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "RxJS wrapper for the amqplib from squaremo",
   "repository": {
     "type": "git",
@@ -18,13 +18,17 @@
   "bugs": {
     "url": "https://github.com/SkippyZA/rx-amqplib/issues"
   },
-  "main": "src/RxAmqpLib.ts",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "dist/"
+  ],
   "scripts": {
-    "clean": "node_modules/.bin/rimraf dist/*",
-    "build:lint": "node_modules/.bin/tslint --config=tslint.json --project=tsconfig.json",
-    "build:ts": "node_modules/.bin/tsc",
-    "build": "npm run lint && npm run build:ts",
-
+    "clean": "rimraf dist/*",
+    "build:lint": "tslint --config=tslint.json --project=tsconfig.json",
+    "build:ts": "tsc",
+    "build": "npm run clean && npm run build:lint && npm run build:ts",
+    "prepublish": "typings install && npm run build",
     "example-client": "npm run build && node ./examples/client.js",
     "example-emit-logs-direct": "npm run build && node ./examples/emit_log_direct.js",
     "example-emit-logs-topic": "npm run build && node ./examples/emit_log_topic.js",
@@ -40,13 +44,14 @@
   },
   "homepage": "https://github.com/SkippyZA/rx-amqplib#readme",
   "dependencies": {
-    "amqplib": "^0.4.1",
     "node-uuid": "^1.4.7",
-    "rx": "^4.1.0"
+    "rxjs": "^5.0.0-rc.1",
+    "amqplib": "^0.4.2"
   },
   "devDependencies": {
     "rimraf": "^2.5.4",
     "tslint": "^3.15.1",
-    "typescript": "^2.0.3"
+    "typescript": "^2.0.6",
+    "typings": "^1.4.0"
   }
 }
