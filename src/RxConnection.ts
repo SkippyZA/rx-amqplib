@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import RxChannel from './RxChannel';
-import {Connection, Channel, Options} from 'amqplib';
+import {Connection, Channel} from 'amqplib';
 
 /**
  * Connection to AMQP server.
@@ -17,7 +17,7 @@ class RxConnection {
   /**
    * Opens a channel. May fail if there are no more channels available.
    *
-   * @returns {any}
+   * @returns Rx.Observable<RxChannel>
    */
   public createChannel(): Observable<RxChannel> {
     return Observable.fromPromise(this.connection.createChannel())

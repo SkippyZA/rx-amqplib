@@ -1,9 +1,17 @@
-import {Replies} from 'amqplib/properties';
+import {Replies as AmqplibReply} from 'amqplib/properties';
 import RxChannel from '../RxChannel';
 
-class EmptyReply implements Replies.Empty {
+/**
+ * Emptry reply message containing `RxChannel`.
+ */
+class EmptyReply implements AmqplibReply.Empty {
   channel: RxChannel;
 
+  /**
+   * Class constructor.
+   *
+   * @param channel
+   */
   constructor(channel: RxChannel) {
     this.channel = channel;
   }

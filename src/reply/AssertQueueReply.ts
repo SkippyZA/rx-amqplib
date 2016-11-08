@@ -1,14 +1,22 @@
-import {Replies} from 'amqplib/properties';
+import {Replies as AmqplibReply} from 'amqplib/properties';
 import RxChannel from '../RxChannel';
 
-
-class AssertQueueReply implements Replies.AssertQueue {
+/**
+ * Message reply from `assertQueue`/`checkQueue` on a `RxChannel`
+ */
+class AssertQueueReply implements AmqplibReply.AssertQueue {
   public channel: RxChannel;
   public queue: string;
   public messageCount: number;
   public consumerCount: number;
 
-  constructor(channel: RxChannel, reply: Replies.AssertQueue) {
+  /**
+   * Class constructor.
+   *
+   * @param channel
+   * @param reply
+   */
+  constructor(channel: RxChannel, reply: AmqplibReply.AssertQueue) {
     this.channel = channel;
 
     this.queue = reply.queue;
