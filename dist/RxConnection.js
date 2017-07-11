@@ -1,6 +1,7 @@
 "use strict";
-var Rx = require('rx');
-var RxChannel_1 = require('./RxChannel');
+Object.defineProperty(exports, "__esModule", { value: true });
+var Rx = require("rx");
+var RxChannel_1 = require("./RxChannel");
 /**
  * Connection to AMQP server.
  */
@@ -19,8 +20,24 @@ var RxConnection = (function () {
      * @returns {any}
      */
     RxConnection.prototype.createChannel = function () {
-        return Rx.Observable.fromPromise(this.connection.createChannel())
-            .map(function (channel) { return new RxChannel_1.default(channel); });
+        var _this = this;
+        return Rx.Observable.create(function (observer) {
+            var channel;
+            var channel$ = Rx.Observable.fromPromise(_this.connection.createChannel())
+                .map(function (channel) { return new RxChannel_1.default(channel); });
+            var disposable = channel$.subscribe(function (c) {
+                channel = c;
+                observer.onNext(c);
+            }, function (e) { return observer.onError(e); });
+            return function () {
+                disposable.dispose();
+                try {
+                    channel.close();
+                }
+                catch (e) {
+                }
+            };
+        });
     };
     /**
      * Close the connection cleanly. Will immediately invalidate any unresolved operations, so it's best to make sure
@@ -34,5 +51,4 @@ var RxConnection = (function () {
     };
     return RxConnection;
 }());
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = RxConnection;

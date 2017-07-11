@@ -1,6 +1,6 @@
 import * as Rx from 'rx';
 import RxChannel from './RxChannel';
-import {Connection, Channel, Options} from 'amqplib';
+import {Connection, Channel} from 'amqplib';
 
 /**
  * Connection to AMQP server.
@@ -14,14 +14,34 @@ class RxConnection {
   constructor(private connection: Connection) {
   }
 
+
   /**
    * Opens a channel. May fail if there are no more channels available.
    *
    * @returns {any}
    */
   public createChannel(): Rx.Observable<RxChannel> {
-    return Rx.Observable.fromPromise(this.connection.createChannel())
-      .map((channel: Channel) => new RxChannel(channel));
+    return <Rx.Observable<RxChannel>> Rx.Observable.create(observer => {
+      let channel: RxChannel;
+      let channel$: Rx.Observable<RxChannel> = Rx.Observable.fromPromise(this.connection.createChannel())
+        .map((channel: Channel) => new RxChannel(channel));
+
+      let disposable = channel$.subscribe(
+        c  => {
+          channel = c;
+          observer.onNext(c);
+        },
+        e  => observer.onError(e)
+      );
+
+      return () => {
+        disposable.dispose();
+        try {
+          channel.close();
+        } catch (e) {
+        }
+      }
+    })
   }
 
   /**
